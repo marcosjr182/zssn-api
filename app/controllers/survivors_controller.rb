@@ -1,18 +1,40 @@
 class SurvivorsController < ApplicationController
   before_action :set_survivor, only: [:show, :update, :destroy]
 
-  # GET /survivors
+  def_param_group :location do
+    param :lat, Float, 'Latitude'
+    param :lng, Float, 'Longitude'
+  end
+
+  def_param_group :items do
+    param :water, :number, 'Water'
+    param :food, :number, 'Food'
+    param :medication, :number, 'Medication'
+    param :ammo, :number, 'Ammunition'
+  end
+
+  def_param_group :survivor do
+    param :id, :number
+    param :name, String
+    param :age, :number
+    param_group :location
+    param_group :items
+  end
+
+  api :GET, '/survivors'
   def index
     survivors = Survivor.page(params[:page]).per(12)
     render json: survivors, meta: {pagination: {per_page: 12}}
   end
 
-  # GET /survivors/1
+  api :GET, '/survivors/:id'
+  param :id, :number
   def show
     render json: @survivor
   end
 
-  # POST /survivors
+  api :POST, '/survivors'
+  param_group :survivor
   def create
     @survivor = Survivor.new(survivor_params)
 
@@ -23,7 +45,20 @@ class SurvivorsController < ApplicationController
     end
   end
 
+  api :PATCH, '/survivors/:id'
+  param :id, :number
+  def update
+    @survivor = Survivor.find(params[:id])
+    if @survivor.update(location_params)
+      render json: @survivor, status: :ok, location: @survivor
+    else
+      render json: @survivor.errors, status: :unprocessable_entity
+    end
+  end
+
   # DELETE /survivors/1
+  api :DELETE, '/survivors'
+  param :id, :number
   def destroy
     @survivor.destroy
   end
@@ -32,6 +67,10 @@ class SurvivorsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_survivor
       @survivor = Survivor.find(params[:id])
+    end
+
+    def location_params
+      params.require(:survivor).permit(:lat, :lng)
     end
 
     # Only allow a trusted parameter "white list" through.
