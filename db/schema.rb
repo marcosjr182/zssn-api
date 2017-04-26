@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(version: 20170419164228) do
     t.string   "name",                       null: false
     t.string   "gender"
     t.integer  "age"
-    t.float    "lat",                        null: false
-    t.float    "lng",                        null: false
+    t.float    "lat"
+    t.float    "lng"
     t.integer  "water",      default: 0
     t.integer  "food",       default: 0
     t.integer  "medication", default: 0
