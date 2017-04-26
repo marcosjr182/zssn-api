@@ -62,6 +62,24 @@ module Api::V1
       end
     end
 
+    api :POST, '/report_infection'
+    param :infected_id, :number
+    param :survivor_id, :number
+    def report_infection
+      return head 400 unless params[:survivor_id] and params[:infected_id]
+
+      @infected = Survivor.find(params[:infected_id])
+      @survivor = Survivor.find(params[:survivor_id])
+
+      if @infected.nil? or @survivor.nil?
+        return render json: { error: 'Invalid parameters' }, status: 403
+      elsif @survivor.report(@infected)
+        return head 204
+      else
+        render json: { error: 'Survivor was already reported by this survivor' }, status: 403
+      end
+    end
+
     private
       # Use callbacks to share common setup or constraints between actions.
       def set_survivor
