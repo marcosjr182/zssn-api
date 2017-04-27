@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe Api::V1::SurvivorsController, :type => :api do
+describe Api::V1::SurvivorsController, type: :api do
   let!(:survivor) { create(:survivor) }
 
   context '#create' do
