@@ -20,4 +20,8 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  reports:
+    items: "Average quantity of %{item} per survivor"
+    survivors: "Percentage of %{status} survivors"
+    lost_points: "Points lost due to infection"
+

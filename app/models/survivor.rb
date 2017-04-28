@@ -1,6 +1,4 @@
 class Survivor < ApplicationRecord
-  class InfectedSurvivorError < StandardError; end
-
   has_and_belongs_to_many :survivors,
     :join_table => 'infected_survivors',
     :foreign_key => 'survivor_id',
@@ -11,6 +9,9 @@ class Survivor < ApplicationRecord
   before_create :build_default_inventory
 
   validates :name, presence: true
+
+  scope :healthy,  -> { where(infected: false) }
+  scope :infected, -> { where(infected: true) }
 
   def report(survivor)
     return false if survivor.infected?
