@@ -4,7 +4,7 @@ module Api::V1
 
     api!
     def index
-      response = [:water, :food, :medication, :ammo].map { |item| create_report(item) }
+      response = [:water, :food, :medication, :ammo].map { |item| average_report(item) }
       render json: response, status: 200
     end
 

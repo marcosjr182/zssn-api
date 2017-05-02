@@ -23,9 +23,5 @@ module Api::V1
           :value => (Survivor.public_send(status).count.to_f / Survivor.all.count) * 100
         }
       end
-
-      def set_survivors
-        @survivors = Survivor
-      end
   end
 end
