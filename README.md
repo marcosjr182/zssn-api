@@ -1,24 +1,26 @@
-# README
+## Installation
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+First up, your system will need the prerequisites for running Ruby on Rails installed
 
-Things you may want to cover:
+Once you have these:
 
-* Ruby version
+#### Install the project dependencies
+```
+$ gem install bundler
+$ bundle install
+$ npm install
+```
 
-* System dependencies
+#### Set up the development database
+```
+$ rails db:migrate
+$ rake db:setup
+```
 
-* Configuration
+#### Start the local web server
+```
+$ rails server
+```
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Documentation
+Available at `/apipie`
