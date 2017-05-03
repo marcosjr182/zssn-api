@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root to: redirect('/apipie')
   namespace :api do
     namespace :v1 do
-      resources :survivors
+      resources :survivors, except: [:destroy]
     end
   end
 end
