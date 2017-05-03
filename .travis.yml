@@ -1,0 +1,18 @@
+language: ruby
+cache: bundler
+services:
+  - postgresql
+sudo: false
+env:
+  - "DB=postgresql"
+install:
+  - bundle install
+before_script:
+  - cp config/database.yml.example config/database.yml
+  - psql -c 'create database travis_ci_test;' -U postgres
+  - "bundle exec rails db:migrate RAILS_ENV=test"
+  - "bundle exec rake db:setup"
+rvm:
+  - 2.3.1
+script:
+  - "bundle exec rspec spec"
