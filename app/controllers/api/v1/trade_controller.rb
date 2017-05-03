@@ -2,23 +2,23 @@ module Api::V1
   class TradeController < ApiController
     before_action :set_traders, only: [:index]
 
-    def_param_group :trade do
+    def_param_group :trade_apipie do
       param :survivor, Hash, :required => true, :desc => 'Survivor' do
         param :id, :number, :required => true
         param :offer, Hash, :required => true do
-          param_group :items, SurvivorsController
+          param_group :items_apipie, SurvivorsController
         end
       end
       param :recipient, Hash, :required => true, :desc => 'Trade Recipient' do
         param :id, :number, :required => true
         param :offer, Hash, :required => true do
-          param_group :items, SurvivorsController
+          param_group :items_apipie, SurvivorsController
         end
       end
     end
 
     api :POST, '/trade'
-    param_group :trade
+    param_group :trade_apipie
     def index
       unless @survivor and @recipient
         return render json: { error: 'Invalid Traders' }, status: 403

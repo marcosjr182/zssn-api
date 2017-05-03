@@ -4,8 +4,8 @@ module Api::V1
 
     def_param_group :location_apipie do
       param :survivor, Hash, :required => true do
-        param :lat, :number, 'Latitude', :required => true
-        param :lng, :number, 'Longitude', :required => true
+        param :lat, :undef, 'Latitude', :required => true
+        param :lng, :undef, 'Longitude', :required => true
       end
     end
 
@@ -17,18 +17,20 @@ module Api::V1
     end
 
     def_param_group :survivor_apipie do
-      param :name, String, :required => true
-      param :age, :number
-      param :lat, :number, 'Latitude'
-      param :lng, :number, 'Longitude'
-      param_group :items_apipie
+      param :survivor, Hash, :required => true do
+        param :name, String
+        param :age, :number
+        param :lat, :undef, 'Latitude'
+        param :lng, :undef, 'Longitude'
+        param_group :items_apipie
+      end
     end
 
     api :GET, '/survivors', 'List survivors'
     param :page, :number
     def index
       survivors = Survivor.page(params[:page]).per(12)
-      render json: survivors, meta: {pagination: {per_page: 12}}
+      render json: survivors, meta: { pagination: { per_page: 12 } }
     end
 
     api :GET, '/survivors/:id', 'Get a single survivor'
@@ -38,7 +40,7 @@ module Api::V1
     end
 
     api :POST, '/survivors', 'Create a new survivor'
-    param_group :survivor_apipie, :required => true
+    param_group :survivor_apipie
     def create
       @survivor = Survivor.new(survivor_params)
 
@@ -87,8 +89,7 @@ module Api::V1
       end
 
       def location_params
-        params.require(:survivor)
-        params.require(:survivor => [:lat, :lng])
+        params.require(:survivor).permit(:lat, :lng)
       end
 
       # Only allow a trusted parameter "white list" through.

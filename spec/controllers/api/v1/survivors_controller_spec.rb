@@ -24,19 +24,25 @@ describe Api::V1::SurvivorsController, type: :api do
       expect(last_response.status).to eql(200)
     end
 
-    it "can take a page as parameter" do
-      get "/api/v1/survivors", { :page => 2 }
-      expect(last_response.status).to eql(200)
-      expect(json['survivors']).to be_empty
+    context "when it has a page parameter" do
+      subject { get "/api/v1/survivors", { :page => 2 } }
+      it { expect(subject.status). to eql(200) }
+      it { expect(subject_json['survivors']).to be_empty }
     end
   end
 
-  context '#update' do
-    it 'should update only the location for valid users' do
-      params = {survivor: { name: 'Test', lat: 5.5, lng: 1.1 }}
-      patch "api/v1//survivors/#{survivor.id}", params
-      expect(last_response.status).to be(200)
-      expect(json['survivor']['name']).to eq(survivor.name)
+  describe '#update' do
+    let(:params) { { survivor: { :lat => 5.5, :lng => 1.1 } } }
+
+    context 'when trying to update a location' do
+      subject { patch "api/v1//survivors/#{survivor.id}", params }
+      it { expect(subject.status).to be(200) }
+    end
+
+    context 'when trying to update something else' do
+      subject { patch "api/v1//survivors/#{survivor.id}", params.merge!({name: 'Test'}) }
+      it { expect(subject.status).to be(200) }
+      it { expect(subject_json['location']).to eq(params['survivor']) }
     end
   end
 
