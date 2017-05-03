@@ -1,40 +1,39 @@
 module Api::V1
   class Reports::ItemsController < ApiController
-    before_action :set_survivors
+    before_action :set_survivors, except: [:lost]
 
-    api!
+    api! 'Items average reports'
     def index
       response = [:water, :food, :medication, :ammo].map { |item| average_report(item) }
       render json: response, status: 200
     end
 
-    api!
+    api! 'Average water quantity per survivor'
     def water
       render json: average_report(:water), status: 200
     end
 
-    api!
+    api! 'Average food quantity per survivor'
     def food
       render json: average_report(:food), status: 200
     end
 
-    api!
+    api! 'Average medication quantity per survivor'
     def medication
       render json: average_report(:medication), status: 200
     end
 
-    api!
+    api! 'Average ammunition per survivor'
     def ammo
       render json: average_report(:ammo), status: 200
     end
 
-    api!
+    api! 'Points lost due to infection'
     def lost
       render json: lost_score_report, status: 200
     end
 
     private
-
       def report(title, value)
         { :title => title, :value => value }
       end

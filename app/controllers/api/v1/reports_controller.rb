@@ -1,6 +1,6 @@
 module Api::V1
   class ReportsController < ApiController
-    api!
+    api! 'List available reports'
     def index
       response = { reports: { items: items, survivors: survivors } }
       render json: response, status: 200
