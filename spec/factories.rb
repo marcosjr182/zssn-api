@@ -4,7 +4,7 @@ FactoryGirl.define do
     s.sequence(:name) {|n| "Survivor #{n}"}
 
     trait :with_items do
-      after(:build) do |object|
+      after(:create) do |object|
         object.update!(water: 1, food: 2, medication: 3, ammo: 4)
       end
     end
