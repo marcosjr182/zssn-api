@@ -3,6 +3,10 @@ module Requests
     def json
       JSON.parse(last_response.body)
     end
+
+    def subject_json
+      JSON.parse(subject.body)
+    end
   end
 end
 
