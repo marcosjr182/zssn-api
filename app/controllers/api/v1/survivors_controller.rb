@@ -1,5 +1,7 @@
 module Api::V1
   class SurvivorsController < ApiController
+    rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
+
     before_action :set_survivor, only: [:show, :update, :destroy]
 
     def_param_group :location_apipie do
@@ -57,11 +59,8 @@ module Api::V1
     param :id, :number, required: true
     def update
       @survivor = Survivor.find(params[:id])
-      if @survivor.update(location_params)
-        render json: @survivor, status: :ok
-      else
-        render json: @survivor.errors, status: :unprocessable_entity
-      end
+      @survivor.update(location_params)
+      render json: @survivor, status: :ok
     end
 
     api :POST, '/report_infection'
@@ -73,10 +72,8 @@ module Api::V1
       @infected = Survivor.find(params[:infected_id])
       @survivor = Survivor.find(params[:survivor_id])
 
-      if @infected.nil? or @survivor.nil?
-        return render json: { error: 'Invalid parameters' }, status: 403
-      elsif @survivor.report(@infected)
-        return head 204
+      if @survivor.report(@infected)
+        head 204
       else
         render json: { error: 'Survivor was already reported by this survivor' }, status: 403
       end

@@ -1,5 +1,6 @@
 module Api::V1
   class TradeController < ApiController
+    before_action :trade_params
     before_action :set_traders, only: [:index]
 
     def_param_group :trade_apipie do
@@ -17,13 +18,9 @@ module Api::V1
       end
     end
 
-    api :POST, '/trade'
+    api :POST, '/trade', 'Trade items'
     param_group :trade_apipie
     def index
-      unless @survivor and @recipient
-        return render json: { error: 'Invalid Traders' }, status: 403
-      end
-
       if @survivor.infected? or @recipient.infected?
         return render json: { error: 'Infected survivors are not allowed to trade' }, status: 403
       end
