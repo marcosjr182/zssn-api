@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/marcosjr182/zssn-api.svg?branch=master)](https://travis-ci.org/marcosjr182/zssn-api)
 ## Installation
 
 First up, your system will need the prerequisites for running Ruby on Rails installed
