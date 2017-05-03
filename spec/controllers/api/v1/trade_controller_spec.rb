@@ -25,6 +25,11 @@ RSpec.describe Api::V1::TradeController, type: :api do
       it { expect(subject.status).to be(403) }
     end
 
+    context 'when a trader does not exist' do
+      subject { post '/api/v1/trade', trade_params.merge(survivor: { id: 99999, offer: offer_items }) }
+      it { expect(subject.status).to be(403) }
+    end
+
     context 'when a trader is infected' do
       let(:infected_trade_params) { trade_params.merge(survivor: { id: infected.id, offer: offer_items.merge(medication: 2) }) }
       subject { post '/api/v1/trade', infected_trade_params }
