@@ -32,7 +32,8 @@ describe Api::V1::SurvivorsController, type: :api do
   end
 
   describe '#update' do
-    let(:params) { { survivor: { :lat => 5.5, :lng => 1.1 } } }
+    let(:location) { { :lat => 5.5, :lng => 1.1 } }
+    let(:params) { { survivor: location } }
 
     context 'when trying to update a location' do
       subject { patch "api/v1//survivors/#{survivor.id}", params }
@@ -40,9 +41,9 @@ describe Api::V1::SurvivorsController, type: :api do
     end
 
     context 'when trying to update something else' do
-      subject { patch "api/v1//survivors/#{survivor.id}", params.merge!({name: 'Test'}) }
+      subject { patch "api/v1//survivors/#{survivor.id}", { survivor: location.merge!(name: 'Test') } }
       it { expect(subject.status).to be(200) }
-      it { expect(subject_json['location']).to eq(params['survivor']) }
+      it { expect(subject_json['survivor']['name']).to start_with("Survivor") }
     end
   end
 
