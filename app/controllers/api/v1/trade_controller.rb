@@ -36,11 +36,11 @@ module Api::V1
 
         balance = survivor_offer[item].to_i - recipient_offer[item].to_i
         if balance.positive?
-          @recipient[item] -= balance
-          @survivor[item]  += balance
+          @recipient.inventory[item] -= balance
+          @survivor.inventory[item]  += balance
         elsif balance.negative?
-          @recipient[item] += balance
-          @survivor[item]  -= balance
+          @recipient.inventory[item] += balance
+          @survivor.inventory[item]  -= balance
         end
       end
 

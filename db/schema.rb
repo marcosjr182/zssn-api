@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170426175622) do
+ActiveRecord::Schema.define(version: 20170504160302) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,20 +20,28 @@ ActiveRecord::Schema.define(version: 20170426175622) do
     t.integer "survivor_id", null: false
   end
 
+  create_table "inventories", force: :cascade do |t|
+    t.integer  "water",       default: 0
+    t.integer  "food",        default: 0
+    t.integer  "medication",  default: 0
+    t.integer  "ammo",        default: 0
+    t.integer  "survivor_id"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.index ["survivor_id"], name: "index_inventories_on_survivor_id", using: :btree
+  end
+
   create_table "survivors", force: :cascade do |t|
     t.string   "name",                            null: false
     t.string   "gender"
     t.integer  "age"
     t.float    "lat"
     t.float    "lng"
-    t.integer  "water",           default: 0
-    t.integer  "food",            default: 0
-    t.integer  "medication",      default: 0
-    t.integer  "ammo",            default: 0
     t.boolean  "infected",        default: false
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.integer  "infection_count", default: 0
   end
 
+  add_foreign_key "inventories", "survivors"
 end

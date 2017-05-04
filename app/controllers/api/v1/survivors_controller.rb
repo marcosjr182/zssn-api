@@ -12,10 +12,12 @@ module Api::V1
     end
 
     def_param_group :items_apipie do
-      param :water, :number, 'Water'
-      param :food, :number, 'Food'
-      param :medication, :number, 'Medication'
-      param :ammo, :number, 'Ammunition'
+      param :inventory_attributes, Hash do
+        param :water, :number, 'Water'
+        param :food, :number, 'Food'
+        param :medication, :number, 'Medication'
+        param :ammo, :number, 'Ammunition'
+      end
     end
 
     def_param_group :survivor_apipie do
@@ -45,7 +47,6 @@ module Api::V1
     param_group :survivor_apipie
     def create
       @survivor = Survivor.new(survivor_params)
-
       if @survivor.save
         render json: @survivor, status: :created
       else
@@ -91,7 +92,9 @@ module Api::V1
 
       # Only allow a trusted parameter "white list" through.
       def survivor_params
-        params.require(:survivor).permit(:name, :age, :gender, :lat, :lng, :water, :food, :medication, :ammo, :infected, :age)
+        params.require(:survivor)
+          .permit(:name, :age, :gender, :lat, :lng, :infected,
+                  :inventory_attributes => [:water, :food, :medication, :ammo])
       end
   end
 end
