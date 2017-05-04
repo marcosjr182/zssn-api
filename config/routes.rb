@@ -10,6 +10,25 @@ Rails.application.routes.draw do
       end
 
       post :trade, to: 'trade#index', as: 'trade'
+
+      namespace :reports do
+        get '/' => :index
+
+        namespace :items do
+          get '/' => :index
+          get :water
+          get :food
+          get :medication
+          get :ammo
+          get :lost
+        end
+
+        namespace :survivors do
+          get '/' => :index
+          get :infected
+          get :healthy
+        end
+      end
     end
   end
 end
