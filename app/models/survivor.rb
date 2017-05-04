@@ -1,4 +1,6 @@
 class Survivor < ApplicationRecord
+  class InfectedSurvivorError < StandardError; end
+
   has_and_belongs_to_many :survivors,
     :join_table => 'infected_survivors',
     :foreign_key => 'survivor_id',

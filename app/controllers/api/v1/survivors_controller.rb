@@ -1,7 +1,5 @@
 module Api::V1
   class SurvivorsController < ApiController
-    rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
-
     before_action :set_survivor, only: [:show, :update, :destroy]
 
     def_param_group :location_apipie do
