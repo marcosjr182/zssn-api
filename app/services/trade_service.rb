@@ -11,7 +11,6 @@ class TradeService
   def process
     raise InvalidTrade.new('Infected survivors cannot trade') if @survivor.infected? or @recipient.infected?
     if trade_items
-      puts trade_items
       Survivor.transaction do
         @survivor.save!
         @recipient.save!
@@ -29,11 +28,11 @@ class TradeService
 
         balance = @survivor_offer[item_name].to_i - @recipient_offer[item_name].to_i
         if balance.positive?
-          @recipient[item_name] -= balance
-          @survivor[item_name]  += balance
+          @recipient.inventory[item_name] -= balance
+          @survivor.inventory[item_name]  += balance
         elsif balance.negative?
-          @recipient[item_name] += balance
-          @survivor[item_name]  -= balance
+          @recipient.inventory[item_name] += balance
+          @survivor.inventory[item_name]  -= balance
         end
       end
 
