@@ -1,7 +1,5 @@
 module Api::V1
   class SurvivorsController < ApiController
-    rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
-
     before_action :set_survivor, only: [:show, :update, :destroy]
 
     def_param_group :location_apipie do
@@ -62,22 +60,6 @@ module Api::V1
       @survivor = Survivor.find(params[:id])
       @survivor.update(location_params)
       render json: @survivor, status: :ok
-    end
-
-    api :POST, '/report_infection'
-    param :infected_id, :number
-    param :survivor_id, :number
-    def report_infection
-      return head 400 unless params[:survivor_id] and params[:infected_id]
-
-      @infected = Survivor.find(params[:infected_id])
-      @survivor = Survivor.find(params[:survivor_id])
-
-      if @survivor.report(@infected)
-        head 204
-      else
-        render json: { error: 'Survivor was already reported by this survivor' }, status: 403
-      end
     end
 
     private

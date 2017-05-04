@@ -1,5 +1,6 @@
 module Api::V1
   class TradeController < ApiController
+    rescue_from TradeService::InvalidTrade, :with => :invalid_trade
     before_action :trade_params
     before_action :set_traders, only: [:index]
 
@@ -21,37 +22,7 @@ module Api::V1
     api :POST, '/trade', 'Trade items'
     param_group :trade_apipie
     def index
-      if @survivor.infected? or @recipient.infected?
-        return render json: { error: 'Infected survivors are not allowed to trade' }, status: 403
-      end
-
-      survivor_offer  = params[:survivor][:offer]
-      recipient_offer = params[:recipient][:offer]
-
-      offer_score = { survivor: 0, recipient: 0 }
-
-      ITEMS.each do |item, item_score|
-        offer_score[:survivor]  += item_score * survivor_offer[item].to_i
-        offer_score[:recipient] += item_score * recipient_offer[item].to_i
-
-        balance = survivor_offer[item].to_i - recipient_offer[item].to_i
-        if balance.positive?
-          @recipient.inventory[item] -= balance
-          @survivor.inventory[item]  += balance
-        elsif balance.negative?
-          @recipient.inventory[item] += balance
-          @survivor.inventory[item]  -= balance
-        end
-      end
-
-      if offer_score[:survivor].eql? offer_score[:recipient]
-        @survivor.save!
-        @recipient.save!
-      else
-        return render json: { error: 'Trade offers do not have the same score' }, status: 403
-      end
-
-      head 204
+      head 204 if TradeService.new(@survivor, @recipient, params).process
     end
 
     private
@@ -63,6 +34,10 @@ module Api::V1
       def trade_params
         params.require(:survivor).permit(:id, :offer => [:water, :food, :medication, :ammo])
         params.require(:recipient).permit(:id, :offer => [:water, :food, :medication, :ammo])
+      end
+
+      def invalid_trade(error)
+        render json: { error: error.message }, status: 403
       end
   end
 end

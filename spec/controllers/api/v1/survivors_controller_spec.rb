@@ -47,25 +47,6 @@ describe Api::V1::SurvivorsController, type: :api do
     end
   end
 
-  context '#report' do
-    let!(:target) { create(:survivor) }
-    let!(:survivors) { create_list(:survivor, 3) }
-
-    it 'should be able to report a survivor' do
-      params = { infected_id: target.id, survivor_id: survivors[0].id }
-      post '/api/v1/report_infection', params
-      expect(last_response.status).to be(204)
-    end
-
-    it 'should not be able to report a survivor twice' do
-      params = { infected_id: target.id, survivor_id: survivors[0].id }
-      post '/api/v1/report_infection', params
-      post '/api/v1/report_infection', params
-      expect(last_response.status).to be(403)
-    end
-
-  end
-
   context '#show' do
     it 'should get a single survivor' do
       get "/api/v1/survivors/#{survivor.id}"
