@@ -17,6 +17,7 @@ RSpec.describe Api::V1::TradeController, type: :api do
     context 'when trade is valid' do
       subject { post '/api/v1/trade', trade_params }
       it { expect(subject.status).to be(204) }
+      it { expect(survivor.reload.inventory['medication']).to eq(5) }
     end
 
     context 'when trade offers have different scores' do

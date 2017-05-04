@@ -22,7 +22,8 @@ module Api::V1
     api :POST, '/trade', 'Trade items'
     param_group :trade_apipie
     def index
-      head 204 if TradeService.new(@survivor, @recipient, params).process
+      a = TradeService.new(@survivor, @recipient, params).process
+      head 204
     end
 
     private

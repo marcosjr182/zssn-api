@@ -10,11 +10,10 @@ class TradeService
 
   def process
     raise InvalidTrade.new('Infected survivors cannot trade') if @survivor.infected? or @recipient.infected?
-    if trade_items
-      Survivor.transaction do
-        @survivor.save!
-        @recipient.save!
-      end
+    trade_items
+    Survivor.transaction do
+      @survivor.save!
+      @recipient.save!
     end
   end
 

@@ -1,12 +1,4 @@
 FactoryGirl.define do
-  factory :inventory do
-    water 1
-    food 1
-    medication 1
-    ammo 1
-    survivor nil
-  end
-
   factory :survivor do |s|
     s.sequence(:name) {|n| "Survivor #{n}"}
 
@@ -16,5 +8,4 @@ FactoryGirl.define do
       end
     end
   end
-
 end

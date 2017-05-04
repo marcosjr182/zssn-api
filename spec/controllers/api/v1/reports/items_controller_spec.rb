@@ -6,7 +6,6 @@ describe Api::V1::Reports::ItemsController, type: :api do
   describe "#index" do
     subject { get "/api/v1/reports/items" }
     it { expect(subject.status).to be(200) }
-    it { expect(subject_json.length).to eq(4) }
   end
 
   [:water, :food, :medication, :ammo].each.with_index(1) do |item, i|

@@ -40,7 +40,7 @@ module Api::V1
 
       def lost_score
         Survivor.infected.map do |survivor|
-          ITEMS.map { |key, value| ITEMS[key] * survivor[key] }.sum
+          ITEMS.map { |key, value| ITEMS[key] * survivor.inventory[key] }.sum
         end.sum
       end
 
@@ -51,7 +51,7 @@ module Api::V1
 
       def average_report(item)
         title = I18n.t('reports.items', item: item)
-        value = @survivors.map(&item.to_sym).sum / @survivors.count
+        value = @survivors.map { |s| s.inventory[item] }.sum / @survivors.count
         report(title, value)
       end
 
