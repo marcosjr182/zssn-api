@@ -4,11 +4,11 @@ class Survivor < ApplicationRecord
     :foreign_key => 'survivor_id',
     :association_foreign_key => 'infected_id'
 
-  validates :name, presence: true
+  has_one :inventory
+  accepts_nested_attributes_for :inventory
+  before_create :build_default_inventory
 
-  def items
-    { water: self.water, food: self.food, ammo: self.ammo, medication: self.medication }
-  end
+  validates :name, presence: true
 
   def report(survivor)
     return false if survivor.infected?
@@ -26,7 +26,17 @@ class Survivor < ApplicationRecord
     end
   end
 
+  def items
+    InventorySerializer.new(self.inventory)
+  end
+
   def location
     { lat: self.lat, lng: self.lng }
   end
+
+  private
+    def build_default_inventory
+      build_inventory unless self.inventory
+      true
+    end
 end

@@ -14,7 +14,6 @@ genders = ['MALE', 'FEMALE']
     gender: genders.shuffle.sample,
     lat: 32.438784,
     lng: 98.48394,
-    ammo: 10,
-    food: 10
+    inventory_attributes: { water: 10, food: 5, ammo: 3 }
   )
 end

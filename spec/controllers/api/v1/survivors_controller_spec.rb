@@ -11,7 +11,7 @@ describe Api::V1::SurvivorsController, type: :api do
     end
 
     it 'should not create a survivor without a name' do
-      survivor_params = {survivor: {water: 0, food: 1, age: 10}}
+      survivor_params = {survivor: {gender: 'F', age: 10}}
       post '/api/v1/survivors', survivor_params
       expect(last_response.status).to be(422)
     end
