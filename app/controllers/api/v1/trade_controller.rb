@@ -22,7 +22,7 @@ module Api::V1
     api :POST, '/trade', 'Trade items'
     param_group :trade_apipie
     def index
-      a = TradeService.new(@survivor, @recipient, params).process
+      TradeService.new(@survivor, @recipient, params).process
       head 204
     end
 

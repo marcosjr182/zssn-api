@@ -11,25 +11,32 @@ class TradeService
   def process
     raise InvalidTrade.new('Infected survivors cannot trade') if @survivor.infected? or @recipient.infected?
     trade_items
-    Survivor.transaction do
-      @survivor.save!
-      @recipient.save!
+    Inventory.transaction do
+      @survivor.inventory.save!
+      @recipient.inventory.save!
     end
   end
 
   private
+    def check_balance(item_name)
+      if @survivor_offer[item_name].to_i > @survivor.inventory[item_name] or
+         @recipient_offer[item_name].to_i > @recipient.inventory[item_name]
+        raise InvalidTrade.new('Balance is not enough to trade')
+      end
+    end
+
     def trade_items
       offer_score = { survivor: 0, recipient: 0 }
 
       ITEMS.each do |item_name, item_score|
+        check_balance(item_name)
+
         offer_score[:survivor]  += item_score * @survivor_offer[item_name].to_i
         offer_score[:recipient] += item_score * @recipient_offer[item_name].to_i
 
         balance = @survivor_offer[item_name].to_i - @recipient_offer[item_name].to_i
-        if balance.positive?
-          @recipient.inventory[item_name] -= balance
-          @survivor.inventory[item_name]  += balance
-        elsif balance.negative?
+
+        unless balance.eql? 0
           @recipient.inventory[item_name] += balance
           @survivor.inventory[item_name]  -= balance
         end
