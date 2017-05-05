@@ -30,3 +30,7 @@ en:
         infected: 'Infected survivors cannot trade'
         balance: 'Trader has not enough items to trade'
         score: 'Trade offers do not have the same score'
+      flag:
+        infected: 'Survivor is already marked as infected'
+        infected_flagger: 'Infected survivors cannot report survivors'
+        recurrent: 'Survivor was already reported by this survivor'
