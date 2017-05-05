@@ -23,5 +23,10 @@ en:
   reports:
     items: "Average quantity of %{item} per survivor"
     survivors: "Percentage of %{status} survivors"
-    lost_points: "Points lost due to infection"
-
+    lost_points: 'Points lost due to infection'
+  errors:
+    services:
+      trade:
+        infected: 'Infected survivors cannot trade'
+        balance: 'Trader has not enough items to trade'
+        score: 'Trade offers do not have the same score'

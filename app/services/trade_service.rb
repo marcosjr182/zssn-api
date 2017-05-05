@@ -9,7 +9,7 @@ class TradeService
   end
 
   def process
-    raise InvalidTrade.new('Infected survivors cannot trade') if @survivor.infected? or @recipient.infected?
+    raise InvalidTrade.new(I18n.t('errors.services.trade.infected')) if @survivor.infected? or @recipient.infected?
     trade_items
     Inventory.transaction do
       @survivor.inventory.save!
@@ -21,7 +21,7 @@ class TradeService
     def check_balance(item_name)
       if @survivor_offer[item_name].to_i > @survivor.inventory[item_name] or
          @recipient_offer[item_name].to_i > @recipient.inventory[item_name]
-        raise InvalidTrade.new('Balance is not enough to trade')
+        raise InvalidTrade.new(I18n.t('errors.services.trade.balance'))
       end
     end
 
@@ -43,7 +43,7 @@ class TradeService
       end
 
       unless offer_score[:survivor].eql? offer_score[:recipient]
-        raise InvalidTrade.new('Trade offers do not have the same score')
+        raise InvalidTrade.new(I18n.t('errors.services.trade.score'))
       end
     end
 
