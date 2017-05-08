@@ -34,29 +34,29 @@ module Api::V1
     end
 
     private
-      def report(title, value)
-        { :title => title, :value => value }
-      end
+    def report(title, value)
+      { :title => title, :value => value }
+    end
 
-      def lost_score
-        Survivor.infected.map do |survivor|
-          ITEMS.map { |key, value| ITEMS[key] * survivor.inventory[key] }.sum
-        end.sum
-      end
+    def lost_score
+      Survivor.infected.map do |survivor|
+        ITEMS.map { |key, value| value * survivor.inventory[key] }.sum
+      end.sum
+    end
 
-      def lost_score_report
-        title = I18n.t('reports.lost_points')
-        report(title, lost_score)
-      end
+    def lost_score_report
+      title = I18n.t('reports.lost_points')
+      report(title, lost_score)
+    end
 
-      def average_report(item)
-        title = I18n.t('reports.items', item: item)
-        value = @survivors.map { |s| s.inventory[item] }.sum / @survivors.count
-        report(title, value)
-      end
+    def average_report(item)
+      title = I18n.t('reports.items', item: item)
+      value = @survivors.map { |s| s.inventory[item] }.sum / @survivors.count
+      report(title, value)
+    end
 
-      def set_survivors
-        @survivors = Survivor.healthy
-      end
+    def set_survivors
+      @survivors = Survivor.healthy
+    end
   end
 end

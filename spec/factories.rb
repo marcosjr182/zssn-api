@@ -1,10 +1,10 @@
 FactoryGirl.define do
 
   factory :inventory do |i|
-    water 1
-    food  2
-    medication 3
-    ammo 4
+    i.water 1
+    i.food  2
+    i.medication 3
+    i.ammo 4
   end
 
   factory :survivor do |s|

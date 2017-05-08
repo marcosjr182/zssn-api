@@ -27,18 +27,18 @@ module Api::V1
     end
 
     private
-      def set_traders
-        @survivor  = Survivor.find(params[:survivor][:id])
-        @recipient = Survivor.find(params[:recipient][:id])
-      end
+    def set_traders
+      @survivor  = Survivor.find(params[:survivor][:id])
+      @recipient = Survivor.find(params[:recipient][:id])
+    end
 
-      def trade_params
-        params.require(:survivor).permit(:id, :offer => [:water, :food, :medication, :ammo])
-        params.require(:recipient).permit(:id, :offer => [:water, :food, :medication, :ammo])
-      end
+    def trade_params
+      params.require(:survivor).permit(:id, :offer => [:water, :food, :medication, :ammo])
+      params.require(:recipient).permit(:id, :offer => [:water, :food, :medication, :ammo])
+    end
 
-      def invalid_trade(error)
-        render json: { error: error.message }, status: 403
-      end
+    def invalid_trade(error)
+      render json: { error: error.message }, status: 403
+    end
   end
 end

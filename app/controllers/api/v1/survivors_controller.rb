@@ -63,20 +63,19 @@ module Api::V1
     end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_survivor
-        @survivor = Survivor.find(params[:id])
-      end
+    def set_survivor
+      @survivor = Survivor.find(params[:id])
+    end
 
-      def location_params
-        params.require(:survivor).permit(:lat, :lng)
-      end
+    def location_params
+      params.require(:survivor).permit(:lat, :lng)
+    end
 
-      # Only allow a trusted parameter "white list" through.
-      def survivor_params
-        params.require(:survivor)
-          .permit(:name, :age, :gender, :lat, :lng, :infected,
-                  :inventory_attributes => [:water, :food, :medication, :ammo])
-      end
+    # Only allow a trusted parameter "white list" through.
+    def survivor_params
+      params.require(:survivor)
+        .permit(:name, :age, :gender, :lat, :lng, :infected,
+                :inventory_attributes => [:water, :food, :medication, :ammo])
+    end
   end
 end

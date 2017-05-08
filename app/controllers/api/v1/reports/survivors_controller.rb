@@ -17,11 +17,11 @@ module Api::V1
     end
 
     private
-      def create_report(status)
-        {
-          :title => I18n.t("reports.survivors", status: status),
-          :value => (Survivor.public_send(status).count.to_f / Survivor.all.count) * 100
-        }
-      end
+    def create_report(status)
+      {
+        :title => I18n.t("reports.survivors", status: status),
+        :value => (Survivor.public_send(status).count.to_f / Survivor.all.count) * 100
+      }
+    end
   end
 end

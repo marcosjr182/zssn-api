@@ -15,8 +15,8 @@ module Api::V1
     end
 
     private
-      def invalid_report(error)
-        render json: { error: error.message }, status: 403
-      end
+    def invalid_report(error)
+      render json: { error: error.message }, status: 403
+    end
   end
 end

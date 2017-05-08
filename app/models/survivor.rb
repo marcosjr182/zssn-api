@@ -22,8 +22,8 @@ class Survivor < ApplicationRecord
   end
 
   private
-    def build_default_inventory
-      build_inventory unless self.inventory
-      true
-    end
+  def build_default_inventory
+    build_inventory unless self.inventory
+    true
+  end
 end
