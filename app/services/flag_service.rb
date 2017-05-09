@@ -2,9 +2,9 @@ class FlagService
   class InvalidReport < StandardError; end
 
   def self.process(flagger, survivor)
-    raise InvalidReport.new('Survivor is already marked as infected') if survivor.infected? or flagger.infected?
-    raise InvalidReport.new('Survivor was already reported by this survivor') if flagger.survivors.include? survivor
-
+    raise InvalidReport.new(I18n.t('errors.services.flag.infected'))  if survivor.infected?
+    raise InvalidReport.new(I18n.t('errors.services.flag.recurrent')) if flagger.survivors.include? survivor
+    raise InvalidReport.new(I18n.t('errors.services.flag.infected_flagger')) if flagger.infected?
     if survivor.infection_count.eql? 2
       survivor.infected = true
       survivor.save!

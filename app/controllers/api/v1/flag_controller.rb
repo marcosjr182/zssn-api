@@ -2,7 +2,7 @@ module Api::V1
   class FlagController < ApiController
     rescue_from FlagService::InvalidReport, :with => :invalid_report
 
-    api :POST, '/report_infection', 'Report a survivor as infected'
+    api :POST, '/flag/infected', 'Report a survivor as infected'
     param :infected_id, :number
     param :survivor_id, :number
     def infected
@@ -15,8 +15,8 @@ module Api::V1
     end
 
     private
-      def invalid_report(error)
-        render json: { error: error.message }, status: 403
-      end
+    def invalid_report(error)
+      render json: { error: error.message }, status: 403
+    end
   end
 end

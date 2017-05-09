@@ -1,20 +1,16 @@
 FactoryGirl.define do
-  factory :inventory do
-    water 1
-    food 1
-    medication 1
-    ammo 1
-    survivor nil
+
+  factory :inventory do |i|
+    i.water 1
+    i.food  2
+    i.medication 3
+    i.ammo 4
   end
 
   factory :survivor do |s|
     s.sequence(:name) {|n| "Survivor #{n}"}
 
-    trait :with_items do
-      after(:create) do |object|
-        object.inventory.update!(water: 1, food: 2, medication: 3, ammo: 4)
-      end
-    end
+    s.association :inventory
   end
 
 end

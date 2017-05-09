@@ -7,17 +7,17 @@ module Api::V1
     end
 
     private
-      def items
-        [ "/reports/items/water",
-          "/reports/items/food",
-          "/reports/items/medication",
-          "/reports/items/ammo",
-          "/reports/items/lost" ]
-      end
+    def items
+      [ "/reports/items/water",
+        "/reports/items/food",
+        "/reports/items/medication",
+        "/reports/items/ammo",
+        "/reports/items/lost" ]
+    end
 
-      def survivors
-        [ "/reports/survivors/healthy",
-          "/reports/survivors/infected" ]
-      end
+    def survivors
+      [ "/reports/survivors/healthy",
+        "/reports/survivors/infected" ]
+    end
   end
 end

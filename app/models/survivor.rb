@@ -13,22 +13,6 @@ class Survivor < ApplicationRecord
   scope :healthy,  -> { where(infected: false) }
   scope :infected, -> { where(infected: true) }
 
-  def report(survivor)
-    return false if survivor.infected?
-    if self.survivors.include? survivor or survivor.infection_count.eql? 2
-      unless survivor.infected?
-        survivor.infected = true
-        survivor.save!
-      end
-
-      return false
-    else
-      survivor.increment!(:infection_count)
-      self.survivors.append(survivor)
-      return true
-    end
-  end
-
   def items
     InventorySerializer.new(self.inventory)
   end
@@ -38,8 +22,8 @@ class Survivor < ApplicationRecord
   end
 
   private
-    def build_default_inventory
-      build_inventory unless self.inventory
-      true
-    end
+  def build_default_inventory
+    build_inventory unless self.inventory
+    true
+  end
 end

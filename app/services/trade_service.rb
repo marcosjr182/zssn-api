@@ -9,36 +9,41 @@ class TradeService
   end
 
   def process
-    raise InvalidTrade.new('Infected survivors cannot trade') if @survivor.infected? or @recipient.infected?
-    if trade_items
-      Survivor.transaction do
-        @survivor.save!
-        @recipient.save!
-      end
+    raise InvalidTrade.new(I18n.t('errors.services.trade.infected')) if @survivor.infected? or @recipient.infected?
+    trade_items
+    Inventory.transaction do
+      @survivor.inventory.save!
+      @recipient.inventory.save!
     end
   end
 
   private
-    def trade_items
-      offer_score = { survivor: 0, recipient: 0 }
+  def check_balance(item_name)
+    if @survivor_offer[item_name].to_i > @survivor.inventory[item_name] or
+       @recipient_offer[item_name].to_i > @recipient.inventory[item_name]
+      raise InvalidTrade.new(I18n.t('errors.services.trade.balance'))
+    end
+  end
 
-      ITEMS.each do |item_name, item_score|
-        offer_score[:survivor]  += item_score * @survivor_offer[item_name].to_i
-        offer_score[:recipient] += item_score * @recipient_offer[item_name].to_i
+  def trade_items
+    offer_score = { survivor: 0, recipient: 0 }
 
-        balance = @survivor_offer[item_name].to_i - @recipient_offer[item_name].to_i
-        if balance.positive?
-          @recipient.inventory[item_name] -= balance
-          @survivor.inventory[item_name]  += balance
-        elsif balance.negative?
-          @recipient.inventory[item_name] += balance
-          @survivor.inventory[item_name]  -= balance
-        end
-      end
+    ITEMS.each do |item_name, item_score|
+      check_balance(item_name)
 
-      unless offer_score[:survivor].eql? offer_score[:recipient]
-        raise InvalidTrade.new('Trade offers do not have the same score')
+      offer_score[:survivor]  += item_score * @survivor_offer[item_name].to_i
+      offer_score[:recipient] += item_score * @recipient_offer[item_name].to_i
+
+      balance = @survivor_offer[item_name].to_i - @recipient_offer[item_name].to_i
+
+      unless balance.eql? 0
+        @recipient.inventory[item_name] += balance
+        @survivor.inventory[item_name]  -= balance
       end
     end
 
+    unless offer_score[:survivor].eql? offer_score[:recipient]
+      raise InvalidTrade.new(I18n.t('errors.services.trade.score'))
+    end
+  end
 end

@@ -1,27 +1,28 @@
 require "rails_helper"
 
 describe Api::V1::SurvivorsController, type: :api do
-  let!(:survivor) { create(:survivor) }
+  let!(:survivor)  { create(:survivor) }
+  let!(:survivors) { create_list(:survivor, 10) }
 
-  context '#create' do
-    it 'should create a survivor' do
-      survivor_params = {survivor: {name: 'Test'}}
-      post '/api/v1/survivors', survivor_params
-      expect(last_response.status).to be(201)
+  describe '#create' do
+    context 'with valid params' do
+      let!(:survivor_params) { {survivor: {name: 'Test'}} }
+      subject { post '/api/v1/survivors', survivor_params }
+      it { expect(subject.status).to be(201) }
     end
 
-    it 'should not create a survivor without a name' do
-      survivor_params = {survivor: {gender: 'F', age: 10}}
-      post '/api/v1/survivors', survivor_params
-      expect(last_response.status).to be(422)
+    context 'with no name' do
+      let!(:survivor_params) { {survivor: {gender: 'F', age: 10}} }
+      subject { post '/api/v1/survivors', survivor_params }
+      it { expect(subject.status).to be(422) }
     end
   end
 
-  context '#index' do
-    it "GET index" do
-      get '/api/v1/survivors'
-      survivor = SurvivorSerializer.new(survivor)
-      expect(last_response.status).to eql(200)
+  describe '#index' do
+    context "with no parameters" do
+      let!(:serialized) { SurvivorSerializer.new(survivors) }
+      subject { get '/api/v1/survivors' }
+      it { expect(subject.status).to eql(200) }
     end
 
     context "when it has a page parameter" do
@@ -47,10 +48,17 @@ describe Api::V1::SurvivorsController, type: :api do
     end
   end
 
-  context '#show' do
-    it 'should get a single survivor' do
-      get "/api/v1/survivors/#{survivor.id}"
-      expect(json['survivor']['name']).to eq(survivor.name)
+  describe '#show' do
+    context 'with a valid survivor id' do
+      subject { get "/api/v1/survivors/#{survivor.id}" }
+      it { expect(subject.status).to be(200) }
+      it { expect(subject_json['survivor']['name']).to eq(survivor.name) }
+    end
+
+    context 'with an invalid survivor id' do
+      subject { get "/api/v1/survivors/#{9999999}" }
+      it { expect(subject.status).to be(403) }
+      it { expect(subject_json['error']).to start_with("Couldn't find Survivor") }
     end
   end
 end
