@@ -48,7 +48,7 @@ gem 'active_model_serializers', '~> 0.10.0'
 
 gem 'apipie-rails'
 
-gem 'kaminari'
+gem 'kaminari', '>= 1.2.1'
 gem 'pager_api'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
