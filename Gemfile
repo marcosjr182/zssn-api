@@ -7,7 +7,7 @@ end
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.1'
+gem 'rails', '~> 5.2.4', '>= 5.2.4.4'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
@@ -28,8 +28,8 @@ gem 'puma', '~> 3.0'
 group :development, :test do
   gem 'byebug', platform: :mri
   gem "database_cleaner"
-  gem "rspec-rails"
-  gem 'factory_girl_rails'
+  gem "rspec-rails", ">= 3.5.2"
+  gem 'factory_girl_rails', '>= 4.8.0'
 end
 
 group :test do
@@ -44,11 +44,11 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-gem 'active_model_serializers', '~> 0.10.0'
+gem 'active_model_serializers', '~> 0.10.4'
 
-gem 'apipie-rails'
+gem 'apipie-rails', '>= 0.5.0'
 
-gem 'kaminari'
+gem 'kaminari', '>= 1.0.1'
 gem 'pager_api'
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
